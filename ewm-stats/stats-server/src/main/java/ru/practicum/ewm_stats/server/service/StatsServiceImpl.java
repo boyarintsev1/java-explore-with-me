@@ -46,15 +46,13 @@ public class StatsServiceImpl implements StatsService {
         log.info("Исполняется запрос на получение статистики посещений.");
 
         if (uris != null) {
-            if (uniqueIp) {
-                return statsRepository.findViewStatsWithUriAndIp(startPeriod, endPeriod, uris, uniqueIp);
-            }
-            return statsRepository.findViewStatsWithUris(startPeriod, endPeriod, uris);
+            return uniqueIp
+                    ? statsRepository.findViewStatsWithUriAndIp(startPeriod, endPeriod, uris, uniqueIp)
+                    : statsRepository.findViewStatsWithUris(startPeriod, endPeriod, uris);
         } else {
-            if (uniqueIp) {
-                return statsRepository.findViewStatsWithIp(startPeriod, endPeriod, uniqueIp);
-            }
-            return statsRepository.findViewStatsWithoutUriAndIp(startPeriod, endPeriod);
+            return uniqueIp
+                    ? statsRepository.findViewStatsWithIp(startPeriod, endPeriod, uniqueIp)
+                    : statsRepository.findViewStatsWithoutUriAndIp(startPeriod, endPeriod);
         }
     }
 }
