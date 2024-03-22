@@ -20,4 +20,10 @@ public interface StatsService {
      * Метод получения статистики по посещениям.
      */
     List<ViewStats> findViewStats(String start, String end, String[] uris, Boolean uniqueIp);
+
+    /**
+     * метод определения уникальности IP-адреса для конкретного события (URI);
+     */
+    Boolean checkUniqueIpForUri(String ip, String uri);
+
 }

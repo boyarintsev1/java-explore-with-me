@@ -28,6 +28,6 @@ public class EndpointHitClient extends BaseClient {
     }
 
     public ResponseEntity<Object> createEndpointHit(EndpointHitRequestDto endpointHitRequestDto) {
-        return post("", endpointHitRequestDto);
+        return post("", null, endpointHitRequestDto);
     }
 }

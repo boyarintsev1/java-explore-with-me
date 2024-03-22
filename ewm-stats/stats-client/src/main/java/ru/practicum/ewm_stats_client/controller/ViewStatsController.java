@@ -3,10 +3,7 @@ package ru.practicum.ewm_stats_client.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm_stats_client.client.ViewStatsClient;
 
 /**
@@ -17,7 +14,6 @@ import ru.practicum.ewm_stats_client.client.ViewStatsClient;
 @RequiredArgsConstructor
 @RequestMapping("/stats")
 public class ViewStatsController {
-
     private final ViewStatsClient viewStatsClient;
 
     /**
@@ -25,10 +21,19 @@ public class ViewStatsController {
      */
     @GetMapping
     public ResponseEntity<Object> findViewStats(
-            @RequestParam(value = "start", required = true) String start,
-            @RequestParam(value = "end", required = true) String end,
+            @RequestParam(value = "start") String start,
+            @RequestParam(value = "end") String end,
             @RequestParam(value = "uris", required = false) String[] uris,
             @RequestParam(value = "unique", required = false, defaultValue = "false") Boolean uniqueIp) {
         return viewStatsClient.findViewStats(start, end, uris, uniqueIp);
+    }
+
+    /**
+     * метод определения уникальности IP-адреса для конкретного события (URI);
+     */
+    @GetMapping("/{ip}")
+    public ResponseEntity<Object> checkUniqueIpForUri(@PathVariable String ip,
+                                                      @RequestParam(name = "uri") String uri) {
+        return viewStatsClient.checkUniqueIpForUri(ip, uri);
     }
 }

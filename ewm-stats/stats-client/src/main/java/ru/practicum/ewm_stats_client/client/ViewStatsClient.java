@@ -19,7 +19,7 @@ public class ViewStatsClient extends BaseClient {
     private static final String API_PREFIX = "/stats";
 
     @Autowired
-    public ViewStatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public ViewStatsClient(@Value("${STATS_SERVER_URL}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
@@ -29,13 +29,20 @@ public class ViewStatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findViewStats(String start, String end, String[] uris, Boolean uniqueIp) {
-        System.out.println("Я в клиенте ViewStats");
         Map<String, Object> parameters = Map.of(
                 "start", start,
                 "end", end,
                 "uris", uris,
                 "unique", uniqueIp
         );
-        return get("?start={start}&end={end}&uris={uris}&unique={unique}", null, parameters);
+        return get("?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+    }
+
+    public ResponseEntity<Object> checkUniqueIpForUri(String ip, String uri) {
+        Map<String, Object> parameters = Map.of(
+                "ip", ip,
+                "uri", uri
+        );
+        return get("/{ip}?uri={uri}", parameters);
     }
 }

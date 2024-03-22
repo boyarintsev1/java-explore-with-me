@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm_stats.dto.EndpointHitRequestDto;
 import ru.practicum.ewm_stats.dto.ViewStats;
@@ -12,13 +13,16 @@ import ru.practicum.ewm_stats.server.mapper.EndpointHitMapper;
 import ru.practicum.ewm_stats.server.service.StatsService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Класс-контроллер для работы со статистикой посещений сервисов
  */
 @RestController
 @Slf4j
+@Validated
 @RequiredArgsConstructor
 public class StatsController {
     private final StatsService statsService;
@@ -44,7 +48,27 @@ public class StatsController {
             @RequestParam(value = "end") String end,
             @RequestParam(value = "uris", required = false) String[] uris,
             @RequestParam(value = "unique", required = false, defaultValue = "false") Boolean uniqueIp) {
+
+        List<String> urisList = new ArrayList<>();
+        if (uris != null) {
+            for (String s : uris) {
+                if (s.contains("&uris=")) {
+                    urisList.addAll(List.of(s.split("&uris=")));
+                } else {
+                    urisList.add(s);
+                }
+            }
+        }
         log.info("Статистика собрана");
-        return new ResponseEntity<>(statsService.findViewStats(start, end, uris, uniqueIp), HttpStatus.OK);
+        return new ResponseEntity<>(statsService.findViewStats(start, end, urisList.toArray(new String[0]), uniqueIp), HttpStatus.OK);
+    }
+
+    /**
+     * метод определения уникальности IP-адреса для конкретного события (URI);
+     */
+    @GetMapping(path = "/stats/{ip}")
+    public Boolean checkUniqueIpForUri(@PathVariable String ip,
+                                       @RequestParam(name = "uri") String uri) {
+        return statsService.checkUniqueIpForUri(ip, uri);
     }
 }

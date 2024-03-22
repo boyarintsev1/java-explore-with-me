@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,6 +39,13 @@ public class ErrorHandler {
         log.error("Ошибка валидации в следующих полях: {}", errors);
         return new ErrorResponse(
                 String.format("Ошибка валидации в следующих полях: %s", errors));
+    }
+
+    @ExceptionHandler
+    protected ResponseEntity<String> handleMissingServletRequestParameterException(
+            final MissingServletRequestParameterException e) {
+        return new ResponseEntity<>(e.getMessage(),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
