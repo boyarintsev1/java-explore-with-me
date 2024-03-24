@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Service
 public class ViewStatsClient extends BaseClient {
-    private static final String API_PREFIX = "/stats";
+    private static final String API_PREFIX = "/stats";  //
 
     @Autowired
     public ViewStatsClient(@Value("${STATS_SERVER_URL}") String serverUrl, RestTemplateBuilder builder) {

@@ -13,7 +13,6 @@ public class BaseClient {
 
     public BaseClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-
     }
 
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {

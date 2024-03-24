@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException("Событие не найдено или недоступно", eventId, "Event"));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public Page<Event> findEvents(String text, Integer[] categories, Boolean paid, String rangeStart, String rangeEnd,
                                   Boolean onlyAvailable, String sort, Integer from, Integer size,
