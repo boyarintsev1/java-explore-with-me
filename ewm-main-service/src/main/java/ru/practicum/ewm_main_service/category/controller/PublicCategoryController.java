@@ -28,7 +28,6 @@ import java.util.List;
 @Validated
 public class PublicCategoryController {
     private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
 
     /**
      * метод получения информации о категориях
@@ -42,7 +41,7 @@ public class PublicCategoryController {
         return foundedCategories.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
                 : new ResponseEntity<>(foundedCategories
-                .map(categoryMapper::toCategoryDto)
+                .map(CategoryMapper::toCategoryDto)
                 .getContent(), HttpStatus.OK);
     }
 
@@ -52,7 +51,8 @@ public class PublicCategoryController {
     @GetMapping(path = "/{catId}", headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> findCategories(@PathVariable("catId") Long catId) {
         log.info("Выполняется запрос на поиск категории...");
-        return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.findCategoryById(catId)),
+        Category foundedCategory = categoryService.findCategoryById(catId);
+        return new ResponseEntity<>(CategoryMapper.toCategoryDto(foundedCategory),
                 HttpStatus.OK);
     }
 
@@ -61,9 +61,10 @@ public class PublicCategoryController {
      */
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
+        Category category = CategoryMapper.toCategory(newCategoryDto);
         log.info("Выполняется запрос на создание категории...");
-        return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.createCategory(category)),
+        Category newCategory = categoryService.createCategory(category);
+        return new ResponseEntity<>(CategoryMapper.toCategoryDto(newCategory),
                 HttpStatus.CREATED);
     }
 
@@ -73,9 +74,10 @@ public class PublicCategoryController {
     @PatchMapping(path = "/{catId}", headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("catId") Long catId,
                                                       @Valid @RequestBody NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
+        Category category = CategoryMapper.toCategory(newCategoryDto);
         log.info("Выполняется запрос на изменение данных категории...");
-        return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.updateCategory(category, catId)),
+        Category updatedCategory = categoryService.updateCategory(category, catId);
+        return new ResponseEntity<>(CategoryMapper.toCategoryDto(updatedCategory),
                 HttpStatus.OK);
     }
 

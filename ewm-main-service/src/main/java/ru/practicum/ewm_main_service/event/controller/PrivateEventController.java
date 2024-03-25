@@ -35,7 +35,6 @@ public class PrivateEventController {
     private final EventService eventService;
     private final RequestService requestService;
     private final EventMapper eventMapper;
-    private final ParticipationRequestMapper participationRequestMapper;
 
     /**
      * метод получения событий, добавленных текущим пользователем
@@ -62,8 +61,8 @@ public class PrivateEventController {
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("eventId") @Positive Long eventId) {
         log.info("Выполняется запрос на поиск события пользователем...");
-        return new ResponseEntity<>(eventMapper.toEventFullDto(
-                eventService.findEventOfCurrentUserById(userId, eventId)), HttpStatus.OK);
+        Event foundedEvent = eventService.findEventOfCurrentUserById(userId, eventId);
+        return new ResponseEntity<>(eventMapper.toEventFullDto(foundedEvent), HttpStatus.OK);
     }
 
     /**
@@ -74,7 +73,8 @@ public class PrivateEventController {
                                                     @Valid @RequestBody NewEventDto newEventDto) {
         Event event = eventMapper.toEvent(newEventDto, userId);
         log.info("Выполняется запрос на добавление нового события...");
-        return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.createEvent(event)),
+        Event newEvent = eventService.createEvent(event);
+        return new ResponseEntity<>(eventMapper.toEventFullDto(newEvent),
                 HttpStatus.CREATED);
     }
 
@@ -87,9 +87,8 @@ public class PrivateEventController {
             @PathVariable("eventId") @Positive Long eventId,
             @Valid @NotNull @RequestBody UpdateEventUserRequest updateEventUserRequest) {
         log.info("Выполняется запрос на обновление события пользователем...");
-        return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.updateEventByUser(userId, eventId,
-                updateEventUserRequest)),
-                HttpStatus.OK);
+        Event updatedEvent = eventService.updateEventByUser(userId, eventId, updateEventUserRequest);
+        return new ResponseEntity<>(eventMapper.toEventFullDto(updatedEvent), HttpStatus.OK);
     }
 
     /**
@@ -105,7 +104,7 @@ public class PrivateEventController {
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
                 : new ResponseEntity<>(foundedRequests
                 .stream()
-                .map(participationRequestMapper::toParticipationRequestDto)
+                .map(ParticipationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 

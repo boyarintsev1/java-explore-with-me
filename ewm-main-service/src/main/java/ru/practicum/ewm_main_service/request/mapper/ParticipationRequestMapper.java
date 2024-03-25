@@ -1,7 +1,6 @@
 package ru.practicum.ewm_main_service.request.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm_main_service.request.dto.ParticipationRequestDto;
 import ru.practicum.ewm_main_service.request.entity.ParticipationRequest;
 
@@ -11,8 +10,7 @@ import java.time.format.DateTimeFormatter;
  * Класс ParticipationRequestMapper позволяет преобразовать сущность ParticipationRequest в формат исходящих данных
  * ParticipationRequestDto.
  */
-@Component
-@RequiredArgsConstructor
+@UtilityClass
 public class ParticipationRequestMapper {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSS");

@@ -28,7 +28,6 @@ import java.util.List;
 @Validated
 public class AdminUserController {
     private final UserService userService;
-    private final UserMapper userMapper;
 
     /**
      * метод получения информации о пользователях
@@ -43,7 +42,7 @@ public class AdminUserController {
         return foundedUsers.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
                 : new ResponseEntity<>(foundedUsers
-                .map(userMapper::toUserDto)
+                .map(UserMapper::toUserDto)
                 .getContent(), HttpStatus.OK);
     }
 
@@ -52,9 +51,10 @@ public class AdminUserController {
      */
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody NewUserRequest newUserRequest) {
-        User user = userMapper.toUser(newUserRequest);
+        User user = UserMapper.toUser(newUserRequest);
         log.info("Выполняется запрос на регистрацию нового пользователя...");
-        return new ResponseEntity<>(userMapper.toUserDto(userService.createUser(user)), HttpStatus.CREATED);
+        User newUser = userService.createUser(user);
+        return new ResponseEntity<>(UserMapper.toUserDto(newUser), HttpStatus.CREATED);
     }
 
     /**

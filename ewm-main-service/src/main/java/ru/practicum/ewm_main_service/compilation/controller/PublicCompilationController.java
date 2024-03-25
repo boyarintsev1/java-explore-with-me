@@ -51,7 +51,8 @@ public class PublicCompilationController {
     @GetMapping(path = "/{compId}", headers = "Accept=application/json")
     public ResponseEntity<CompilationDto> findCompilationById(@PathVariable("compId") Long compId) {
         log.info("Выполняется запрос на поиск подборки событий...");
-        return new ResponseEntity<>(compilationMapper.toCompilationDto(compilationService.findCompilationById(compId)),
+        Compilation foundedCompilation = compilationService.findCompilationById(compId);
+        return new ResponseEntity<>(compilationMapper.toCompilationDto(foundedCompilation),
                 HttpStatus.OK);
     }
 }

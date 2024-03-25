@@ -24,16 +24,16 @@ import javax.validation.Valid;
 @Validated
 public class AdminCategoryController {
     private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
 
     /**
      * метод создания новой категории
      */
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
+        Category category = CategoryMapper.toCategory(newCategoryDto);
         log.info("Создание запроса на добавление категории...");
-        return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.createCategory(category)),
+        Category newCategory = categoryService.createCategory(category);
+        return new ResponseEntity<>(CategoryMapper.toCategoryDto(newCategory),
                 HttpStatus.CREATED);
     }
 
@@ -43,9 +43,10 @@ public class AdminCategoryController {
     @PatchMapping(path = "/{catId}", headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("catId") Long catId,
                                                       @Valid @RequestBody NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
+        Category category = CategoryMapper.toCategory(newCategoryDto);
         log.info("Создание запроса на обновление категории...");
-        return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.updateCategory(category, catId)),
+        Category updatedCategory = categoryService.updateCategory(category, catId);
+        return new ResponseEntity<>(CategoryMapper.toCategoryDto(updatedCategory),
                 HttpStatus.OK);
     }
 

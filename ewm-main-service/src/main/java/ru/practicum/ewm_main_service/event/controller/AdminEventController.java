@@ -2,12 +2,14 @@ package ru.practicum.ewm_main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm_main_service.event.dto.EventFullDto;
 import ru.practicum.ewm_main_service.event.dto.UpdateEventAdminRequest;
+import ru.practicum.ewm_main_service.event.entity.Event;
 import ru.practicum.ewm_main_service.event.mapper.EventMapper;
 import ru.practicum.ewm_main_service.event.service.EventService;
 
@@ -51,8 +53,9 @@ public class AdminEventController {
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size,
             HttpServletRequest request) {
         log.info("Выполняется запрос на поиск событий...");
-        return new ResponseEntity<>(eventService.findEvents(users, states, categories, rangeStart, rangeEnd, from,
-                        size, request).getContent().stream()
+        Page<Event> foundedEvents = eventService.findEvents(users, states, categories, rangeStart, rangeEnd, from,
+                size, request);
+        return new ResponseEntity<>(foundedEvents.getContent().stream()
                 .map(eventMapper::toEventFullDto).collect(Collectors.toList()),
                 HttpStatus.OK);
     }
@@ -65,8 +68,8 @@ public class AdminEventController {
             @PathVariable("eventId") @Positive Long eventId,
             @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         log.info("Выполняется запрос на обновление события пользователем...");
-        return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.updateEventByAdmin(eventId,
-                updateEventAdminRequest)),
+        Event updatedEvent = eventService.updateEventByAdmin(eventId, updateEventAdminRequest);
+        return new ResponseEntity<>(eventMapper.toEventFullDto(updatedEvent),
                 HttpStatus.OK);
     }
 }

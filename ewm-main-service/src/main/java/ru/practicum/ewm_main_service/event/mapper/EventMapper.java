@@ -25,13 +25,11 @@ import java.time.format.DateTimeFormatter;
 @Component
 @RequiredArgsConstructor
 public class EventMapper {
+    private final RequestService requestService;
+    private final CategoryService categoryService;
+    private final UserService userService;
+    private final LocationService locationService;
 
-    protected final CategoryService categoryService;
-    protected final UserService userService;
-    protected final LocationService locationService;
-    protected final RequestService requestService;
-    protected final UserMapper userMapper;
-    protected final CategoryMapper categoryMapper;
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Event toEvent(NewEventDto newEventDto, Long userId) {
@@ -67,13 +65,13 @@ public class EventMapper {
         return EventFullDto
                 .builder()
                 .annotation(event.getAnnotation())
-                .category(categoryMapper.toCategoryDto(event.getCategory()))
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
                 .confirmedRequests(requestService.countRequestsByEventIdAndStatus(event.getId(), Status.CONFIRMED))
                 .createdOn(dtf.format(event.getCreatedOn()))
                 .description(event.getDescription())
                 .eventDate(dtf.format(event.getEventDate()))
                 .id(event.getId())
-                .initiator(userMapper.toUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(event.getLocation())
                 .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
@@ -94,11 +92,11 @@ public class EventMapper {
         return EventShortDto
                 .builder()
                 .annotation(event.getAnnotation())
-                .category(categoryMapper.toCategoryDto(event.getCategory()))
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
                 .confirmedRequests(requestService.countRequestsByEventIdAndStatus(event.getId(), Status.CONFIRMED))
                 .eventDate(dtf.format(event.getEventDate()))
                 .id(event.getId())
-                .initiator(userMapper.toUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(event.getViews())

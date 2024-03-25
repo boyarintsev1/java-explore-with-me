@@ -1,7 +1,6 @@
 package ru.practicum.ewm_main_service.category.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm_main_service.category.dto.CategoryDto;
 import ru.practicum.ewm_main_service.category.dto.NewCategoryDto;
 import ru.practicum.ewm_main_service.category.entity.Category;
@@ -10,11 +9,10 @@ import ru.practicum.ewm_main_service.category.entity.Category;
  * Класс CategoryMapper позволяет преобразовать входящие данные в сущность Category, а также преобразовать Category
  * в нужный формат возврата данных CategoryDto.
  */
-@Component
-@RequiredArgsConstructor
+@UtilityClass
 public class CategoryMapper {
 
-    public Category toCategory(NewCategoryDto newCategoryDto) {
+    public static Category toCategory(NewCategoryDto newCategoryDto) {
         if (newCategoryDto == null) {
             return null;
         }
@@ -24,7 +22,7 @@ public class CategoryMapper {
                 .build();
     }
 
-    public CategoryDto toCategoryDto(Category category) {
+    public static CategoryDto toCategoryDto(Category category) {
         if (category == null) {
             return null;
         }

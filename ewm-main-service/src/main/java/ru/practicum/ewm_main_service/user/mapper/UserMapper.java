@@ -1,7 +1,6 @@
 package ru.practicum.ewm_main_service.user.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm_main_service.user.dto.NewUserRequest;
 import ru.practicum.ewm_main_service.user.dto.UserDto;
 import ru.practicum.ewm_main_service.user.dto.UserShortDto;
@@ -11,11 +10,10 @@ import ru.practicum.ewm_main_service.user.entity.User;
  * Класс UserMapper позволяет преобразовать входящие данные в сущность User, а также преобразовать User
  * в нужный формат возврата данных UserDto.
  */
-@Component
-@RequiredArgsConstructor
+@UtilityClass
 public class UserMapper {
 
-    public User toUser(NewUserRequest newUserRequest) {
+    public static User toUser(NewUserRequest newUserRequest) {
         if (newUserRequest == null) {
             return null;
         }
@@ -26,7 +24,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserDto toUserDto(User user) {
+    public static UserDto toUserDto(User user) {
         if (user == null) {
             return null;
         }
@@ -38,7 +36,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserShortDto toUserShortDto(User user) {
+    public static UserShortDto toUserShortDto(User user) {
         if (user == null) {
             return null;
         }

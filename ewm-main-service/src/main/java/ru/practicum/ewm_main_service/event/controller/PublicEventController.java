@@ -2,12 +2,14 @@ package ru.practicum.ewm_main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm_main_service.event.dto.EventFullDto;
 import ru.practicum.ewm_main_service.event.dto.EventShortDto;
+import ru.practicum.ewm_main_service.event.entity.Event;
 import ru.practicum.ewm_main_service.event.mapper.EventMapper;
 import ru.practicum.ewm_main_service.event.service.EventService;
 
@@ -54,8 +56,9 @@ public class PublicEventController {
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size,
             HttpServletRequest request) {
         log.info("Выполняется запрос на поиск событий...");
-        return new ResponseEntity<>(eventService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
-                        sort, from, size, request).getContent().stream()
+        Page<Event> foundedEvents = eventService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+                sort, from, size, request);
+        return new ResponseEntity<>(foundedEvents.getContent().stream()
                 .map(eventMapper::toEventShortDto).collect(Collectors.toList()),
                 HttpStatus.OK);
     }
@@ -66,8 +69,8 @@ public class PublicEventController {
     @GetMapping(path = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<EventFullDto> findEventById(@PathVariable("id") Long eventId, HttpServletRequest request) {
         log.info("Выполняется запрос на поиск события по его ID...");
-        return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.findEventById(eventId, request)),
-                HttpStatus.OK);
+        Event foundedEvent = eventService.findEventById(eventId, request);
+        return new ResponseEntity<>(eventMapper.toEventFullDto(foundedEvent), HttpStatus.OK);
     }
 }
 

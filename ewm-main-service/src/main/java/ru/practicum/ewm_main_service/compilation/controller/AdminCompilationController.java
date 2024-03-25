@@ -35,9 +35,8 @@ public class AdminCompilationController {
     public ResponseEntity<CompilationDto> createCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
         log.info("Выполняется запрос на добавление подборки событий...");
-        return new ResponseEntity<>(compilationMapper.toCompilationDto(
-                compilationService.createCompilation(compilation)),
-                HttpStatus.CREATED);
+        Compilation newCompilation = compilationService.createCompilation(compilation);
+        return new ResponseEntity<>(compilationMapper.toCompilationDto(newCompilation), HttpStatus.CREATED);
     }
 
     /**
@@ -48,9 +47,8 @@ public class AdminCompilationController {
             @PathVariable("compId") @Positive Long compId,
             @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         log.info("Выполняется запрос на обновление подборки событий...");
-        return new ResponseEntity<>(compilationMapper.toCompilationDto(
-                compilationService.updateCompilationById(compId, updateCompilationRequest)),
-                HttpStatus.OK);
+        Compilation updatedCompilation =  compilationService.updateCompilationById(compId, updateCompilationRequest);
+        return new ResponseEntity<>(compilationMapper.toCompilationDto(updatedCompilation), HttpStatus.OK);
     }
 
     /**

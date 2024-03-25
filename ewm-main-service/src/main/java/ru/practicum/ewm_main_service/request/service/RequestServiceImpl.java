@@ -35,7 +35,6 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventService eventService;
     private final UserService userService;
-    private final ParticipationRequestMapper participationRequestMapper;
     private final EventRepository eventRepository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSS");
 
@@ -132,10 +131,10 @@ public class RequestServiceImpl implements RequestService {
                     throw new ForbiddenException("The participant limit has been reached", HttpStatus.CONFLICT);
                 }
                 if (Status.valueOf(request.getStatus()) == Status.CONFIRMED) {
-                    result.getConfirmedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
+                    result.getConfirmedRequests().add(ParticipationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
                 if (Status.valueOf(request.getStatus()) == Status.REJECTED) {
-                    result.getRejectedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
+                    result.getRejectedRequests().add(ParticipationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
                 log.info("Обновлен объект : {}", dbRequest);
             }

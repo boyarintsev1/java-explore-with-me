@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Validated
 public class PrivateRequestController {
     private final RequestService requestService;
-    private final ParticipationRequestMapper participationRequestMapper;
 
     /**
      * метод получения информации о заявках текущего пользователя на участие в чужих событиях
@@ -39,7 +38,7 @@ public class PrivateRequestController {
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
                 : new ResponseEntity<>(foundedRequests
                 .stream()
-                .map(participationRequestMapper::toParticipationRequestDto)
+                .map(ParticipationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
@@ -52,8 +51,8 @@ public class PrivateRequestController {
             @PathVariable("userId") @Positive Long userId,
             @RequestParam(value = "eventId") @Positive Long eventId) {
         log.info("Выполняется запрос на создание заявки на участие в событиях...");
-        return new ResponseEntity<>(participationRequestMapper.toParticipationRequestDto(
-                requestService.createRequest(userId, eventId)),
+        ParticipationRequest newRequest = requestService.createRequest(userId, eventId);
+        return new ResponseEntity<>(ParticipationRequestMapper.toParticipationRequestDto(newRequest),
                 HttpStatus.CREATED);
     }
 
@@ -65,8 +64,8 @@ public class PrivateRequestController {
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("requestId") @Positive Long requestId) {
         log.info("Выполняется запрос на отмену заявки на участие в событиях...");
-        return new ResponseEntity<>(participationRequestMapper.toParticipationRequestDto(
-                requestService.cancelRequestByRequester(userId, requestId)),
+        ParticipationRequest cancelledRequest = requestService.cancelRequestByRequester(userId, requestId);
+        return new ResponseEntity<>(ParticipationRequestMapper.toParticipationRequestDto(cancelledRequest),
                 HttpStatus.OK);
     }
 }
