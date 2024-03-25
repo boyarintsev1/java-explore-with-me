@@ -91,10 +91,10 @@ public class RequestServiceImpl implements RequestService {
         ParticipationRequest dbRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос не найден или недоступен", requestId,
                         "ParticipationRequest"));
-        if (dbRequest.getStatus()==Status.CONFIRMED)
+        if (dbRequest.getStatus() == Status.CONFIRMED)
             throw new ForbiddenException("It is not possible to cancel request with status CONFIRMED",
                     HttpStatus.CONFLICT);
-        if (dbRequest.getStatus()==Status.PENDING) {
+        if (dbRequest.getStatus() == Status.PENDING) {
             dbRequest.setStatus(Status.CANCELED);
         }
         log.info("Обновлен объект : {}", dbRequest);
@@ -113,7 +113,7 @@ public class RequestServiceImpl implements RequestService {
             dbRequest = requestRepository.findById(i)
                     .orElseThrow(() -> new NotFoundException("Запрос не найден или недоступен", i,
                             "ParticipationRequest"));
-            if (dbRequest.getStatus()!=Status.PENDING)
+            if (dbRequest.getStatus() != Status.PENDING)
                 throw new ForbiddenException("Request must have status PENDING", HttpStatus.CONFLICT);
 
             if ((dbEvent.getConfirmedRequests().equals(dbEvent.getParticipantLimit()))
@@ -131,10 +131,10 @@ public class RequestServiceImpl implements RequestService {
                 } else {
                     throw new ForbiddenException("The participant limit has been reached", HttpStatus.CONFLICT);
                 }
-                if (Status.valueOf(request.getStatus())==Status.CONFIRMED) {
+                if (Status.valueOf(request.getStatus()) == Status.CONFIRMED) {
                     result.getConfirmedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
-                if (Status.valueOf(request.getStatus())==Status.REJECTED) {
+                if (Status.valueOf(request.getStatus()) == Status.REJECTED) {
                     result.getRejectedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
                 log.info("Обновлен объект : {}", dbRequest);
