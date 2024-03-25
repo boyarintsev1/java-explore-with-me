@@ -2,6 +2,7 @@ package ru.practicum.ewm_main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +12,7 @@ import ru.practicum.ewm_main_service.event.entity.Event;
 import ru.practicum.ewm_main_service.event.mapper.EventMapper;
 import ru.practicum.ewm_main_service.event.service.EventService;
 import ru.practicum.ewm_main_service.request.dto.ParticipationRequestDto;
+import ru.practicum.ewm_main_service.request.entity.ParticipationRequest;
 import ru.practicum.ewm_main_service.request.mapper.ParticipationRequestMapper;
 import ru.practicum.ewm_main_service.request.service.RequestService;
 
@@ -43,10 +45,11 @@ public class PrivateEventController {
             @PathVariable("userId") @Positive Long userId,
             @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size) {
-        log.info("События найдены");
-        return eventService.findAllEventsOfCurrentUser(userId, from, size).isEmpty()
+        log.info("Выполняется запрос поиск событий...");
+        Page<Event> foundedEvents = eventService.findAllEventsOfCurrentUser(userId, from, size);
+        return foundedEvents.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
-                : new ResponseEntity<>(eventService.findAllEventsOfCurrentUser(userId, from, size)
+                : new ResponseEntity<>(foundedEvents
                 .map(eventMapper::toEventShortDto)
                 .getContent(), HttpStatus.OK);
     }
@@ -58,7 +61,7 @@ public class PrivateEventController {
     public ResponseEntity<EventFullDto> findEventFullDtoOfCurrentUser(
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("eventId") @Positive Long eventId) {
-        log.info("Событие найдены");
+        log.info("Выполняется запрос на поиск события пользователем...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(
                 eventService.findEventOfCurrentUserById(userId, eventId)), HttpStatus.OK);
     }
@@ -70,7 +73,7 @@ public class PrivateEventController {
     public ResponseEntity<EventFullDto> createEvent(@PathVariable("userId") @Positive Long userId,
                                                     @Valid @RequestBody NewEventDto newEventDto) {
         Event event = eventMapper.toEvent(newEventDto, userId);
-        log.info("Событие добавлено.");
+        log.info("Выполняется запрос на добавление нового события...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.createEvent(event)),
                 HttpStatus.CREATED);
     }
@@ -83,7 +86,7 @@ public class PrivateEventController {
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("eventId") @Positive Long eventId,
             @Valid @NotNull @RequestBody UpdateEventUserRequest updateEventUserRequest) {
-        log.info("Событие отредактировано.");
+        log.info("Выполняется запрос на обновление события пользователем...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.updateEventByUser(userId, eventId,
                 updateEventUserRequest)),
                 HttpStatus.OK);
@@ -96,10 +99,11 @@ public class PrivateEventController {
     public ResponseEntity<List<ParticipationRequestDto>> findRequestsToEventOfCurrentUser(
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("eventId") @Positive Long eventId) {
-        log.info("Найдены запросы на участие");
-        return requestService.findRequestsToEventOfCurrentUser(userId, eventId).isEmpty()
+        log.info("Выполняется запрос на поиск запросов на участие в событии пользователя...");
+        List<ParticipationRequest> foundedRequests = requestService.findRequestsToEventOfCurrentUser(userId, eventId);
+        return foundedRequests.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
-                : new ResponseEntity<>(requestService.findRequestsToEventOfCurrentUser(userId, eventId)
+                : new ResponseEntity<>(foundedRequests
                 .stream()
                 .map(participationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList()), HttpStatus.OK);
@@ -113,7 +117,7 @@ public class PrivateEventController {
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("eventId") @Positive Long eventId,
             @Valid @RequestBody EventRequestStatusUpdateRequest request) {
-        log.info("Статус заявок изменён");
+        log.info("Выполняется запрос на изменение статуса запросов на участие в событии пользователя...");
         return new ResponseEntity<>(requestService.updateEventRequestStatus(userId, eventId, request),
                 HttpStatus.OK);
     }

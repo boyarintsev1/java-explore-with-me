@@ -53,7 +53,7 @@ public class PublicEventController {
             @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size,
             HttpServletRequest request) {
-        log.info("События найдены");
+        log.info("Выполняется запрос на поиск событий...");
         return new ResponseEntity<>(eventService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
                         sort, from, size, request).getContent().stream()
                 .map(eventMapper::toEventShortDto).collect(Collectors.toList()),
@@ -65,7 +65,7 @@ public class PublicEventController {
      */
     @GetMapping(path = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<EventFullDto> findEventById(@PathVariable("id") Long eventId, HttpServletRequest request) {
-        log.info("Событие найдено");
+        log.info("Выполняется запрос на поиск события по его ID...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.findEventById(eventId, request)),
                 HttpStatus.OK);
     }

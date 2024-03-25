@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm_main_service.location.entity.Location;
 import ru.practicum.ewm_main_service.location.repository.LocationRepository;
 
+import java.util.Optional;
+
 /**
  * класс для работы с данными о локациях Location при помощи репозитория
  */
@@ -20,9 +22,8 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     @Override
     public Location createLocation(Location location) {
-        return locationRepository.findByLatAndLon(location.getLat(), location.getLon()).isEmpty()
-                ? locationRepository.save(location)
-                : locationRepository.findByLatAndLon(location.getLat(), location.getLon()).get();
+        Optional<Location> foundedLocation = locationRepository.findByLatAndLon(location.getLat(), location.getLon());
+        return foundedLocation.orElseGet(() -> locationRepository.save(location));
     }
 }
 

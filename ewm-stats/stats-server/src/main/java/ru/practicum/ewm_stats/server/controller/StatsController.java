@@ -35,7 +35,7 @@ public class StatsController {
     @PostMapping(path = "/hit")
     public ResponseEntity<EndpointHit> createEndpointHit(@Valid @RequestBody EndpointHitRequestDto endpointHitRequestDto) {
         EndpointHit endpointHit = endpointHitMapper.toEndpointHit(endpointHitRequestDto);
-        log.info("Информация сохранена");
+        log.info("Выполняется запрос на сохранение информации о запросе...");
         return new ResponseEntity<>(statsService.createEndpointHit(endpointHit), HttpStatus.CREATED);
     }
 
@@ -59,8 +59,9 @@ public class StatsController {
                 }
             }
         }
-        log.info("Статистика собрана");
-        return new ResponseEntity<>(statsService.findViewStats(start, end, urisList.toArray(new String[0]), uniqueIp), HttpStatus.OK);
+        log.info("Выполняется запрос на сбор статистики...");
+        return new ResponseEntity<>(statsService.findViewStats(start, end, urisList.toArray(new String[0]), uniqueIp),
+                HttpStatus.OK);
     }
 
     /**

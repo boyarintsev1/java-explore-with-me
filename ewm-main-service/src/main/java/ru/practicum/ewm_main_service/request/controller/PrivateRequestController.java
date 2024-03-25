@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm_main_service.request.dto.ParticipationRequestDto;
+import ru.practicum.ewm_main_service.request.entity.ParticipationRequest;
 import ru.practicum.ewm_main_service.request.mapper.ParticipationRequestMapper;
 import ru.practicum.ewm_main_service.request.service.RequestService;
 
@@ -32,10 +33,11 @@ public class PrivateRequestController {
     @GetMapping(headers = "Accept=application/json")
     public ResponseEntity<List<ParticipationRequestDto>> findRequestsByUserId(
             @PathVariable("userId") @Positive Long userId) {
-        log.info("Найдены запросы на участие");
-        return requestService.findRequestsByUserId(userId).isEmpty()
+        log.info("Выполняется запрос на поиск заявок на участие...");
+        List<ParticipationRequest> foundedRequests = requestService.findRequestsByUserId(userId);
+        return foundedRequests.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
-                : new ResponseEntity<>(requestService.findRequestsByUserId(userId)
+                : new ResponseEntity<>(foundedRequests
                 .stream()
                 .map(participationRequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList()),
@@ -49,7 +51,7 @@ public class PrivateRequestController {
     public ResponseEntity<ParticipationRequestDto> createRequest(
             @PathVariable("userId") @Positive Long userId,
             @RequestParam(value = "eventId") @Positive Long eventId) {
-        log.info("Заявка создана.");
+        log.info("Выполняется запрос на создание заявки на участие в событиях...");
         return new ResponseEntity<>(participationRequestMapper.toParticipationRequestDto(
                 requestService.createRequest(userId, eventId)),
                 HttpStatus.CREATED);
@@ -62,7 +64,7 @@ public class PrivateRequestController {
     public ResponseEntity<ParticipationRequestDto> cancelRequestByRequester(
             @PathVariable("userId") @Positive Long userId,
             @PathVariable("requestId") @Positive Long requestId) {
-        log.info("Заявка отменена.");
+        log.info("Выполняется запрос на отмену заявки на участие в событиях...");
         return new ResponseEntity<>(participationRequestMapper.toParticipationRequestDto(
                 requestService.cancelRequestByRequester(userId, requestId)),
                 HttpStatus.OK);

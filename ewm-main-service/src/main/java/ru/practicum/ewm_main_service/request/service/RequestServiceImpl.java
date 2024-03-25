@@ -37,7 +37,6 @@ public class RequestServiceImpl implements RequestService {
     private final UserService userService;
     private final ParticipationRequestMapper participationRequestMapper;
     private final EventRepository eventRepository;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSS");
 
     @Transactional(readOnly = true)
@@ -65,7 +64,7 @@ public class RequestServiceImpl implements RequestService {
         if (dbEvent.getInitiator().getId().equals(userId))
             throw new ForbiddenException("Инициатор события не может добавить запрос на участие в своём событии",
                     HttpStatus.CONFLICT);
-        if (!dbEvent.getState().equals(State.PUBLISHED))
+        if (dbEvent.getState() != State.PUBLISHED)
             throw new ForbiddenException("Нельзя участвовать в неопубликованном событии",
                     HttpStatus.CONFLICT);
         if ((dbEvent.getParticipantLimit() != 0)
@@ -92,10 +91,10 @@ public class RequestServiceImpl implements RequestService {
         ParticipationRequest dbRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос не найден или недоступен", requestId,
                         "ParticipationRequest"));
-        if (dbRequest.getStatus().equals(Status.CONFIRMED))
+        if (dbRequest.getStatus()==Status.CONFIRMED)
             throw new ForbiddenException("It is not possible to cancel request with status CONFIRMED",
                     HttpStatus.CONFLICT);
-        if (dbRequest.getStatus().equals(Status.PENDING)) {
+        if (dbRequest.getStatus()==Status.PENDING) {
             dbRequest.setStatus(Status.CANCELED);
         }
         log.info("Обновлен объект : {}", dbRequest);
@@ -114,7 +113,7 @@ public class RequestServiceImpl implements RequestService {
             dbRequest = requestRepository.findById(i)
                     .orElseThrow(() -> new NotFoundException("Запрос не найден или недоступен", i,
                             "ParticipationRequest"));
-            if (!dbRequest.getStatus().equals(Status.PENDING))
+            if (dbRequest.getStatus()!=Status.PENDING)
                 throw new ForbiddenException("Request must have status PENDING", HttpStatus.CONFLICT);
 
             if ((dbEvent.getConfirmedRequests().equals(dbEvent.getParticipantLimit()))
@@ -132,10 +131,10 @@ public class RequestServiceImpl implements RequestService {
                 } else {
                     throw new ForbiddenException("The participant limit has been reached", HttpStatus.CONFLICT);
                 }
-                if (Status.valueOf(request.getStatus()).equals(Status.CONFIRMED)) {
+                if (Status.valueOf(request.getStatus())==Status.CONFIRMED) {
                     result.getConfirmedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
-                if (Status.valueOf(request.getStatus()).equals(Status.REJECTED)) {
+                if (Status.valueOf(request.getStatus())==Status.REJECTED) {
                     result.getRejectedRequests().add(participationRequestMapper.toParticipationRequestDto(dbRequest));
                 }
                 log.info("Обновлен объект : {}", dbRequest);

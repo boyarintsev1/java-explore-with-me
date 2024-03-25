@@ -50,7 +50,7 @@ public class AdminEventController {
             @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size,
             HttpServletRequest request) {
-        log.info("События найдены");
+        log.info("Выполняется запрос на поиск событий...");
         return new ResponseEntity<>(eventService.findEvents(users, states, categories, rangeStart, rangeEnd, from,
                         size, request).getContent().stream()
                 .map(eventMapper::toEventFullDto).collect(Collectors.toList()),
@@ -64,7 +64,7 @@ public class AdminEventController {
     public ResponseEntity<EventFullDto> updateEventByAdmin(
             @PathVariable("eventId") @Positive Long eventId,
             @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
-        log.info("Событие отредактировано.");
+        log.info("Выполняется запрос на обновление события пользователем...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(eventService.updateEventByAdmin(eventId,
                 updateEventAdminRequest)),
                 HttpStatus.OK);

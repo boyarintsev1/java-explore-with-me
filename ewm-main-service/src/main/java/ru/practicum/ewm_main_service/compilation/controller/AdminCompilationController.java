@@ -34,7 +34,7 @@ public class AdminCompilationController {
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<CompilationDto> createCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
-        log.info("Подборка добавлена.");
+        log.info("Выполняется запрос на добавление подборки событий...");
         return new ResponseEntity<>(compilationMapper.toCompilationDto(
                 compilationService.createCompilation(compilation)),
                 HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class AdminCompilationController {
     public ResponseEntity<CompilationDto> updateCompilation(
             @PathVariable("compId") @Positive Long compId,
             @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        log.info("Подборка обновлена.");
+        log.info("Выполняется запрос на обновление подборки событий...");
         return new ResponseEntity<>(compilationMapper.toCompilationDto(
                 compilationService.updateCompilationById(compId, updateCompilationRequest)),
                 HttpStatus.OK);
@@ -59,7 +59,7 @@ public class AdminCompilationController {
     @DeleteMapping("/{compId}")
     public ResponseEntity<HttpStatus> deleteCompilation(@PathVariable("compId") Long compId) {
         compilationService.deleteCompilation(compId);
-        log.info("Подборка удалена.");
+        log.info("Выполняется запрос на удаление подборки событий...");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

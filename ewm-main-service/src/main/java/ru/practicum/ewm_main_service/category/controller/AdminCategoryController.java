@@ -32,7 +32,7 @@ public class AdminCategoryController {
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
-        log.info("Категория добавлена");
+        log.info("Создание запроса на добавление категории...");
         return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.createCategory(category)),
                 HttpStatus.CREATED);
     }
@@ -44,7 +44,7 @@ public class AdminCategoryController {
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("catId") Long catId,
                                                       @Valid @RequestBody NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
-        log.info("Данные категории изменены");
+        log.info("Создание запроса на обновление категории...");
         return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.updateCategory(category, catId)),
                 HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class AdminCategoryController {
     @DeleteMapping("/{catId}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("catId") Long catId) {
         categoryService.deleteCategory(catId);
-        log.info("Категория удалена");
+        log.info("Создание запроса на удаление категории...");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

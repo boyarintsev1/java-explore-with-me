@@ -179,7 +179,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(()
                 -> new NotFoundException("Событие не найдено или недоступно", eventId, "Event"));
         System.out.println("VIEWS 1 = " + event.getViews());
-        if (!event.getState().equals(State.PUBLISHED))
+        if (event.getState() != State.PUBLISHED)
             throw new NotFoundException("Event must be published", eventId, "Event");
 
         boolean uniqueIp = Boolean.parseBoolean(Objects.requireNonNull(viewStatsController
@@ -220,7 +220,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно", eventId, "Event"));
         if (!dbEvent.getInitiator().getId().equals(userId))
             throw new ForbiddenException("Only the initiator can update this event.", HttpStatus.CONFLICT);
-        if (dbEvent.getState().equals(State.PUBLISHED))
+        if (dbEvent.getState() == State.PUBLISHED)
             throw new ForbiddenException("Only pending or canceled events can be changed.", HttpStatus.CONFLICT);
 
         if ((updateEventUserRequest.getAnnotation() != null)
@@ -280,7 +280,7 @@ public class EventServiceImpl implements EventService {
     public Event updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event dbEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно", eventId, "Event"));
-        if (!dbEvent.getState().equals(State.PENDING))
+        if (dbEvent.getState() != State.PENDING)
             throw new ForbiddenException(String.format("Cannot publish the event because it's not in the right " +
                     "state: %s", dbEvent.getState()), HttpStatus.CONFLICT);
         if ((updateEventAdminRequest.getAnnotation() != null)

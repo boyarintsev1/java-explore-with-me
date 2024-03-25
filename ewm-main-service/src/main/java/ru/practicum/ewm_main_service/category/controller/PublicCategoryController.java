@@ -2,6 +2,7 @@ package ru.practicum.ewm_main_service.category.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,10 +37,11 @@ public class PublicCategoryController {
     public ResponseEntity<List<CategoryDto>> findCategories(
             @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size) {
-        log.info("Категории найдены");
-        return categoryService.findCategories(from, size).isEmpty()
+        log.info("Выполняется запрос на поиск категорий...");
+        Page<Category> foundedCategories = categoryService.findCategories(from, size);
+        return foundedCategories.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
-                : new ResponseEntity<>(categoryService.findCategories(from, size)
+                : new ResponseEntity<>(foundedCategories
                 .map(categoryMapper::toCategoryDto)
                 .getContent(), HttpStatus.OK);
     }
@@ -49,7 +51,7 @@ public class PublicCategoryController {
      */
     @GetMapping(path = "/{catId}", headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> findCategories(@PathVariable("catId") Long catId) {
-        log.info("Категория найдена");
+        log.info("Выполняется запрос на поиск категории...");
         return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.findCategoryById(catId)),
                 HttpStatus.OK);
     }
@@ -60,7 +62,7 @@ public class PublicCategoryController {
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
-        log.info("Категория добавлена");
+        log.info("Выполняется запрос на создание категории...");
         return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.createCategory(category)),
                 HttpStatus.CREATED);
     }
@@ -72,7 +74,7 @@ public class PublicCategoryController {
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("catId") Long catId,
                                                       @Valid @RequestBody NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
-        log.info("Данные категории изменены");
+        log.info("Выполняется запрос на изменение данных категории...");
         return new ResponseEntity<>(categoryMapper.toCategoryDto(categoryService.updateCategory(category, catId)),
                 HttpStatus.OK);
     }
@@ -83,7 +85,7 @@ public class PublicCategoryController {
     @DeleteMapping("/{catId}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("catId") Long catId) {
         categoryService.deleteCategory(catId);
-        log.info("Категория удалена");
+        log.info("Выполняется запрос на удаление категории...");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

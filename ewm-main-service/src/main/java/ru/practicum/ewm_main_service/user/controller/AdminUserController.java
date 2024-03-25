@@ -2,6 +2,7 @@ package ru.practicum.ewm_main_service.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,10 +38,11 @@ public class AdminUserController {
             @RequestParam(value = "ids", required = false) Integer[] ids,
             @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") @Positive Integer size) {
-        log.info("Исполняется запрос на получение информации о пользователях.");
-        return userService.findUsers(ids, from, size).isEmpty()
+        log.info("Выполняется запрос на получение информации о пользователях...");
+        Page<User> foundedUsers = userService.findUsers(ids, from, size);
+        return foundedUsers.isEmpty()
                 ? new ResponseEntity<>(List.of(), HttpStatus.OK)
-                : new ResponseEntity<>(userService.findUsers(ids, from, size)
+                : new ResponseEntity<>(foundedUsers
                 .map(userMapper::toUserDto)
                 .getContent(), HttpStatus.OK);
     }
@@ -51,7 +53,7 @@ public class AdminUserController {
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody NewUserRequest newUserRequest) {
         User user = userMapper.toUser(newUserRequest);
-        log.info("Пользователь зарегистрирован");
+        log.info("Выполняется запрос на регистрацию нового пользователя...");
         return new ResponseEntity<>(userMapper.toUserDto(userService.createUser(user)), HttpStatus.CREATED);
     }
 
@@ -61,7 +63,7 @@ public class AdminUserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") Long userId) {
         userService.deleteUser(userId);
-        log.info("Пользователь удален");
+        log.info("Выполняется запрос на удаление пользователя...");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
