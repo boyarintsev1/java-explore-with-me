@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS stats (                 -- создание табл�
   app VARCHAR(30) NOT NULL,
   uri VARCHAR(30) NOT NULL,
   ip VARCHAR(20) NOT NULL,
-  created timestamp NOT NULL UNIQUE,
+  created timestamp NOT NULL,
   CONSTRAINT pk_stats_user PRIMARY KEY (id)
 );

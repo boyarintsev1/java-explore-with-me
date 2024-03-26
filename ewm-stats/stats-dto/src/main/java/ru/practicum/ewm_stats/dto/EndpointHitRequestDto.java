@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -32,7 +31,5 @@ public class EndpointHitRequestDto {
     private String uri;
 
     @NotNull(message = "Поле IP отсутствует")
-    @Pattern(regexp = "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$",
-            message = "Неверно указан IP-адрес. Проверьте его формат.")
     private String ip;
 }

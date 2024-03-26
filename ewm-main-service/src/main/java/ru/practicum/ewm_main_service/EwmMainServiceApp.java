@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"ru.practicum.stats-client", "ru.practicum.ewm-main-service"})
+@ComponentScan(basePackages =  {"ru.practicum.ewm_stats_client", "ru.practicum.ewm_main_service"})
 public class EwmMainServiceApp {
 	public static void main(String[] args) {
 		SpringApplication.run(EwmMainServiceApp.class, args);

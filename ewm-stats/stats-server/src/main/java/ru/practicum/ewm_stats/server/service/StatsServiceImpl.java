@@ -27,7 +27,6 @@ public class StatsServiceImpl implements StatsService {
     @Transactional
     @Override
     public EndpointHit createEndpointHit(EndpointHit endpointHit) {
-        endpointHit.setTimestamp(LocalDateTime.now());
         log.info("Создан объект: {}", endpointHit);
         return statsRepository.save(endpointHit);
     }
@@ -37,15 +36,17 @@ public class StatsServiceImpl implements StatsService {
     public List<ViewStats> findViewStats(String start, String end, String[] uris, Boolean uniqueIp) {
         LocalDateTime startPeriod = LocalDateTime.parse(start, dtf);
         LocalDateTime endPeriod = LocalDateTime.parse(end, dtf);
-
+        if (start.equals(null) || end.equals(null)) {
+            throw new ValidationException("Нужно указать дату начала и окончания периода.",
+                    HttpStatus.BAD_REQUEST);
+        }
         if (startPeriod.isAfter(endPeriod) || startPeriod.equals(endPeriod)) {
             throw new ValidationException("Дата начала периода не может быть после его окончания.",
                     HttpStatus.BAD_REQUEST);
         }
-
         log.info("Исполняется запрос на получение статистики посещений.");
 
-        if (uris != null) {
+        if (uris.length > 0) {
             return uniqueIp
                     ? statsRepository.findViewStatsWithUriAndIp(startPeriod, endPeriod, uris, uniqueIp)
                     : statsRepository.findViewStatsWithUris(startPeriod, endPeriod, uris);
@@ -54,6 +55,13 @@ public class StatsServiceImpl implements StatsService {
                     ? statsRepository.findViewStatsWithIp(startPeriod, endPeriod, uniqueIp)
                     : statsRepository.findViewStatsWithoutUriAndIp(startPeriod, endPeriod);
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean checkUniqueIpForUri(String ip, String uri) {
+        log.info("Исполняется запрос на проверку уникальности IP-адреса.");
+        return statsRepository.existsByIpAndUriEH(ip, uri).isEmpty();
     }
 }
 
