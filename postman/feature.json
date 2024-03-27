@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "405468f2-2935-404c-a1b1-ac61cef59443",
 		"name": "Locations",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "29223649"
 	},
 	"item": [
@@ -47,16 +47,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -101,16 +92,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -155,16 +137,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -209,16 +182,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -263,16 +227,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -317,16 +272,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -371,16 +317,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -425,16 +362,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -479,16 +407,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -553,16 +472,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -627,16 +537,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -769,16 +670,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -823,17 +715,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations/5000",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations",
-						"5000"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations/5000"
 			},
 			"response": []
 		},
@@ -878,17 +760,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations/-5",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations",
-						"-5"
-					]
-				}
+				"url": "{{BASE_URL}}/admin/locations/-5"
 			},
 			"response": []
 		},
@@ -1086,17 +958,7 @@
 						"value": "application/json"
 					}
 				],
-				"url": {
-					"raw": "{{BASE_URL}}/admin/locations/5000",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"admin",
-						"locations",
-						"5000"
-					]
-				},
+				"url": "{{BASE_URL}}/admin/locations/5000",
 				"description": "Обратите внимание: с категорий не должно быть связано ни одного события."
 			},
 			"response": []
@@ -1345,7 +1207,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{BASE_URL}}/locations/events?from&size=1000&lat={{myLat}}&lon={{myLon}}&radius=10000",
+					"raw": "{{BASE_URL}}/locations/events?from&size=1000&lat=71&lon=48&radius=2000",
 					"host": [
 						"{{BASE_URL}}"
 					],
@@ -1364,15 +1226,15 @@
 						},
 						{
 							"key": "lat",
-							"value": "{{myLat}}"
+							"value": "71"
 						},
 						{
 							"key": "lon",
-							"value": "{{myLon}}"
+							"value": "48"
 						},
 						{
 							"key": "radius",
-							"value": "10000"
+							"value": "2000"
 						}
 					]
 				}
@@ -1415,16 +1277,6 @@
 		},
 		{
 			"key": "myLocId2",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "myLat",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "myLon",
 			"value": "",
 			"type": "string"
 		}
