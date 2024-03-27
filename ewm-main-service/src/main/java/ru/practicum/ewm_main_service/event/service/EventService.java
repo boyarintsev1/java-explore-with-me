@@ -4,8 +4,10 @@ import org.springframework.data.domain.Page;
 import ru.practicum.ewm_main_service.event.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm_main_service.event.dto.UpdateEventUserRequest;
 import ru.practicum.ewm_main_service.event.entity.Event;
+import ru.practicum.ewm_main_service.location.entity.Location;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * интерфейс для работы с данными о событиях Event
@@ -55,5 +57,11 @@ public interface EventService {
      * редактирование данных события и его статуса (отклонение/публикация) админом.
      */
     Event updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
+
+    /**
+     * поиск событий в указанной локации.
+     */
+    Page<Event> findEventsInLocation(List<Location> foundedNearestlocations, Integer from, Integer size,
+                                     HttpServletRequest request);
 
 }

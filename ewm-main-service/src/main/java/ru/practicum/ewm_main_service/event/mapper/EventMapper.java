@@ -10,6 +10,7 @@ import ru.practicum.ewm_main_service.event.dto.EventFullDto;
 import ru.practicum.ewm_main_service.event.dto.EventShortDto;
 import ru.practicum.ewm_main_service.event.dto.NewEventDto;
 import ru.practicum.ewm_main_service.event.entity.Event;
+import ru.practicum.ewm_main_service.location.mapper.LocationMapper;
 import ru.practicum.ewm_main_service.location.service.LocationService;
 import ru.practicum.ewm_main_service.request.service.RequestService;
 import ru.practicum.ewm_main_service.user.mapper.UserMapper;
@@ -72,7 +73,7 @@ public class EventMapper {
                 .eventDate(dtf.format(event.getEventDate()))
                 .id(event.getId())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .location(event.getLocation())
+                .location(LocationMapper.toLocationShortDto(event.getLocation()))
                 .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
                 .publishedOn(event.getPublishedOn() != null
