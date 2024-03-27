@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.ewm_main_service.event.entity.Event;
+import ru.practicum.ewm_main_service.location.entity.Location;
 
 import java.util.Optional;
 
@@ -22,5 +23,12 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             " WHERE e.id = ?1 AND e.initiator IN (SELECT u.id FROM public.USERS as u WHERE u.id = ?2) ORDER BY e.id",
             nativeQuery = true)
     Optional<Event> findEventOfCurrentUserById(Long eventId, Long userId);
+
+    @Query(value = "SELECT e.* FROM public.EVENTS as e " +
+            " WHERE e.location IN ?1 ORDER BY e.id",
+            nativeQuery = true)
+    Page<Event> findEventsInLocation(Object[] foundedNearestLocations, Pageable page);
+
+    Event findByLocation(Location location);
 }
 

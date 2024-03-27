@@ -19,11 +19,6 @@ import java.time.Duration;
 public class EndpointHitClient extends BaseClient {
     private static final String API_PREFIX = "/hit";
 
-  /*  HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
- requestFactory.setConnectTimeout(10*1000);
- requestFactory.
-    RestTemplate rest = new RestTemplate(requestFactory); */
-
     @Autowired
     public EndpointHitClient(@Value("${STATS_SERVER_URL}") String serverUrl, RestTemplateBuilder builder) {
         super(

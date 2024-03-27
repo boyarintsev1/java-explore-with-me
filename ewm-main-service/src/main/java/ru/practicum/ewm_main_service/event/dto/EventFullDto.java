@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.ewm_main_service.category.dto.CategoryDto;
-import ru.practicum.ewm_main_service.location.entity.Location;
+import ru.practicum.ewm_main_service.location.dto.LocationShortDto;
 import ru.practicum.ewm_main_service.user.dto.UserShortDto;
 
 import javax.validation.constraints.NotBlank;
@@ -46,7 +46,7 @@ public class EventFullDto {
     private UserShortDto initiator;
     @NotNull
     @NotEmpty
-    private Location location;
+    private LocationShortDto location;
     @NotNull
     @NotEmpty
     private boolean paid;

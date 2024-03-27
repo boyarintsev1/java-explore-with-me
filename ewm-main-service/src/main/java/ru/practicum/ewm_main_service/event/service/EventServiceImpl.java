@@ -25,6 +25,7 @@ import ru.practicum.ewm_main_service.event.repository.EventRepository;
 import ru.practicum.ewm_main_service.exception.BadRequestException;
 import ru.practicum.ewm_main_service.exception.ForbiddenException;
 import ru.practicum.ewm_main_service.exception.NotFoundException;
+import ru.practicum.ewm_main_service.location.entity.Location;
 import ru.practicum.ewm_main_service.location.service.LocationService;
 import ru.practicum.ewm_stats.dto.EndpointHitRequestDto;
 import ru.practicum.ewm_stats_client.client.EndpointHitClient;
@@ -178,7 +179,6 @@ public class EventServiceImpl implements EventService {
         log.info("Выполняется запрос на получение события");
         Event event = eventRepository.findById(eventId).orElseThrow(()
                 -> new NotFoundException("Событие не найдено или недоступно", eventId, "Event"));
-        System.out.println("VIEWS 1 = " + event.getViews());
         if (event.getState() != State.PUBLISHED)
             throw new NotFoundException("Event must be published", eventId, "Event");
 
@@ -364,5 +364,32 @@ public class EventServiceImpl implements EventService {
         }
         return eventRepository.save(dbEvent);
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public Page<Event> findEventsInLocation(List<Location> foundedNearestLocations, Integer from, Integer size,
+                                            HttpServletRequest request) {
+        log.info("Выполняется запрос на получение событий в указанной локации.");
+        Pageable page = PageRequest.of(from, size);
+        Page<Event> eventsFound = eventRepository.findEventsInLocation(foundedNearestLocations.toArray(), page);
+
+        for (Event event : eventsFound.getContent()) {
+            boolean uniqueIp = Boolean.parseBoolean(Objects.requireNonNull(viewStatsController
+                    .checkUniqueIpForUri(request.getRemoteAddr(), request.getRequestURI()).getBody()).toString());
+            if (uniqueIp) {
+                event.setViews(event.getViews() + 1);
+            }
+        }
+
+        endpointHitClient.createEndpointHit(EndpointHitRequestDto
+                .builder()
+                .app("ewm-main-service")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .build());
+
+        return eventsFound;
+    }
+
 }
 
